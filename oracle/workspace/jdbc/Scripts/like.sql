@@ -1,0 +1,88 @@
+/*좋아요, 찜 등
+LIKE테이블 생성
+LIKE_ID
+BOARD_ID
+USER_ID
+
+BOARD에 좋아요 컬럼 생성
+좋아요메소드에서는 UPDATE 좋아요 컬럼의 수 + 1 
+*/
+CREATE SEQUENCE SEQ_LIKE;
+
+CREATE TABLE TBL_LIKE(
+	LIKE_ID NUMBER CONSTRAINT PK_LIKE PRIMARY KEY,
+	USER_ID NUMBER NOT NULL,
+	BOARD_ID NUMBER NOT NULL,
+	CONSTRAINT FK_LIKE_USER FOREIGN KEY(USER_ID) REFERENCES TBL_USER(USER_ID) ON DELETE CASCADE,
+	CONSTRAINT FK_LIKE_BOARD FOREIGN KEY(BOARD_ID) REFERENCES TBL_BOARD(BOARD_ID) ON DELETE CASCADE
+);
+
+SELECT * FROM TBL_LIKE;
+
+INSERT INTO TBL_LIKE 
+(LIKE_ID, USER_ID, BOARD_ID)
+VALUES (SEQ_LIKE.NEXTVAL, ?, ?);
+
+
+SELECT USER_ID FROM TBL_LIKE WHERE BOARD_ID = ?
+
+/*===========*/
+/*
+
+게시글에 좋아요한 사람을 찾으려면
+
+LIKE테이블에서 BOARD_ID를 받아서
+
+같을 때, USER테이블과 LIKE테이블 조인해서 USER테이블에서 객체정보 받아오면 됨.
+
+*/
+
+/*BOARD_ID(어떤 게시글인지) LIKE테이블에서 USER_ID = 유저테이블.USER_ID*/
+
+/* 게시글에 좋아요한 사람을 찾으려면 LIKE테이블에서 BOARD_ID를 받아서 같을 때, 
+ * USER테이블과 LIKE테이블 조인해서 USER테이블에서 객체정보 받아오면 됨
+ */
+
+
+SELECT U.USER_ID, USER_IDENTIFICATION, USER_NAME, USER_PASSWORD, USER_PHONE, USER_NICKNAME, USER_EMAIL, USER_ADDRESS, USER_BIRTH, USER_GENDER, USER_RECOMMENDER_ID
+FROM TBL_LIKE L JOIN TBL_USER U 
+ON L.USER_ID = U.USER_ID 
+AND BOARD_ID = ?;
+
+SELECT 
+FROM TBL_USER;
+
+
+
+/*=================*/
+/*
+
+마이페이지에서는 내가 좋아요한 게시글을 찾을 때는
+
+LIKE테이블에 내 유저 아이디가 같을 때 BOARD와 조인하여
+
+좋아요한 게시글을 찾음.
+*/
+
+SELECT B.BOARD_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_REGISTER_DATE, BOARD_UPDATE_DATE, USER_ID, BOARD_LIKE
+FROM TBL_LIKE L JOIN TBL_BOARD B
+ON L.BOARD_ID = B.BOARD_ID 
+AND L.USER_ID = ?;
+
+
+
+
+/*=====================================================*/
+/*팔로우, 쪽지, 채팅 등
+
+팔로우 테이블
+팔로우 ID
+팔로잉 ID(USER_ID)
+팔로워 ID(USER_ID)*/
+
+
+
+
+
+
+
