@@ -1,4 +1,4 @@
-      DBMS_Study
+      DBMS
           Oracle
 
       DBMS의 소통 방식
