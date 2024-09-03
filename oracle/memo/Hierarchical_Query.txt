@@ -1,0 +1,30 @@
+- 계층형 쿼리
+ㄴ 하나의 테이블 내에 레코드들이 계층관계(상위, 하위)를 이루며 존재하는 경우 데이터를 조회하기 위해 사용하는 쿼리를 의미
+    ( 보통 부서 계층을 조회하기 위해 사용 )
+
+
+- 계층형 쿼리(Hierarchical Query) 실행 순서
+
+실행 순서		QUERY 문장				상세 내용					예시
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+6		SELECT [Alias 명]				
+
+1		FROM 테이블명				
+
+5		WHERE 조건절				
+
+2		START WITH 조건식			계층 시작 위치				START WITH DEPT_ID = '최상위 부서 ID'
+
+3		CONNECT BY [PRIOR, NOCYCLE] 조건식	① PRIOR 자식 = 부모			CONNECT BY PRIOR DEPT_ID = DEPT_PAR_ID
+							ㄴ 부모 -> 자식 순으로 순방향 전개		
+
+							② PRIROR 부모 = 자식			CONNECT BY PRIOR DEPT_PAR_ID = DEPT_ID
+							ㄴ 자식 -> 부모 순으로 역방향 전개		
+
+							③ NOCYCLE				CONNECT BY NOCYCLE PRIOR DEPT_ID = DEPT_PAR_ID
+							ㄴ 동일 사이클 미전개						
+
+4		ORDER SIBLINGS BY 컬럼명			형제 노드(동일한 LEVEL) 사이에서 정렬		ORDER SIBLINGS BY DEPT_NAME;
+
+
+
